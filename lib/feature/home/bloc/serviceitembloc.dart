@@ -22,21 +22,27 @@ class ServiceItemBloc extends Cubit<ServiceItemState> {
           items: [
             ServiceItem(
               id: '1',
-              name: 'Surat Keterangan',
-              description: 'Permohonan surat domisili warga.',
+              name: 'Surat Permohonan',
+              description: 'Permohonan pindah domisili.',
               status: ServiceStatus.pending,
             ),
             ServiceItem(
               id: '2',
-              name: 'Pengaduan Jaringan',
-              description: 'Laporan gangguan internet kantor layanan.',
+              name: 'Surat Permohonan',
+              description: 'Permohonan anggaran untuk AI.',
               status: ServiceStatus.inProgress,
             ),
             ServiceItem(
               id: '3',
-              name: 'Validasi Data',
-              description: 'Pengecekan berkas pemohon bantuan.',
+              name: 'Surat Laporan',
+              description: 'Laporan hasil pekerjaan.',
               status: ServiceStatus.completed,
+            ),
+            ServiceItem(
+              id: '4',
+              name: 'Surat Permohonan',
+              description: 'Permohonan resign.',
+              status: ServiceStatus.cancelled,
             ),
           ],
         ),
