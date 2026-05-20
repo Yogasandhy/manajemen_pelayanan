@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manajemen_pelayanan/feature/home/screen/homescreen.dart';
-import 'package:manajemen_pelayanan/feature/home/screen/profilescreen.dart';
+import 'package:manajemen_pelayanan/feature/profile/profilescreen.dart';
 
 class NavigationExample extends StatefulWidget {
   const NavigationExample({super.key});
