@@ -48,72 +48,96 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _showAddServiceSheet(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final nameController = TextEditingController();
-    final descriptionController = TextEditingController();
+    final serviceItemBloc = context.read<ServiceItemBloc>();
 
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       builder: (sheetContext) {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(
-            16,
-            18,
-            16,
-            MediaQuery.of(sheetContext).viewInsets.bottom + 16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                l10n.addService,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 14),
-              TextField(
-                controller: nameController,
-                autofocus: true,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(labelText: l10n.serviceNameLabel),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: descriptionController,
-                minLines: 2,
-                maxLines: 3,
-                decoration: InputDecoration(labelText: l10n.descriptionLabel),
-              ),
-              const SizedBox(height: 16),
-              FilledButton.icon(
-                onPressed: () {
-                  if (nameController.text.trim().isEmpty) {
-                    return;
-                  }
-
-                  context.read<ServiceItemBloc>().addServiceItem(
-                    nameController.text,
-                    descriptionController.text.isEmpty
-                        ? l10n.missingDescription
-                        : descriptionController.text,
-                  );
-                  Navigator.pop(sheetContext);
-                },
-                icon: const Icon(Icons.save_outlined),
-                label: Text(l10n.saveButton),
-              ),
-            ],
-          ),
-        );
+        return _AddServiceSheet(serviceItemBloc: serviceItemBloc);
       },
-    ).whenComplete(() {
-      nameController.dispose();
-      descriptionController.dispose();
-    });
+    );
+  }
+}
+
+class _AddServiceSheet extends StatefulWidget {
+  const _AddServiceSheet({required this.serviceItemBloc});
+
+  final ServiceItemBloc serviceItemBloc;
+
+  @override
+  State<_AddServiceSheet> createState() => _AddServiceSheetState();
+}
+
+class _AddServiceSheetState extends State<_AddServiceSheet> {
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  void _save(AppLocalizations l10n) {
+    if (_nameController.text.trim().isEmpty) {
+      return;
+    }
+
+    widget.serviceItemBloc.addServiceItem(
+      _nameController.text,
+      _descriptionController.text.trim().isEmpty
+          ? l10n.missingDescription
+          : _descriptionController.text,
+    );
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(
+          16,
+          18,
+          16,
+          MediaQuery.of(context).viewInsets.bottom + 16,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l10n.addService,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 14),
+            TextField(
+              controller: _nameController,
+              autofocus: true,
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(labelText: l10n.serviceNameLabel),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _descriptionController,
+              minLines: 2,
+              maxLines: 3,
+              decoration: InputDecoration(labelText: l10n.descriptionLabel),
+            ),
+            const SizedBox(height: 16),
+            FilledButton.icon(
+              onPressed: () => _save(l10n),
+              icon: const Icon(Icons.save_outlined),
+              label: Text(l10n.saveButton),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
