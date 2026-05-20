@@ -222,7 +222,7 @@ class _ServiceCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<ServiceStatus>(
-                    value: item.status,
+                    initialValue: item.status,
                     decoration: const InputDecoration(
                       labelText: 'Status',
                       contentPadding: EdgeInsets.symmetric(horizontal: 12),
