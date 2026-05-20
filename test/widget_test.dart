@@ -19,9 +19,22 @@ void main() {
     await tester.tap(find.text('Tambah Layanan'));
     await tester.pumpAndSettle();
 
-    await tester.enterText(find.byType(EditableText).at(0), 'Tes Layanan');
-    await tester.enterText(find.byType(EditableText).at(1), 'Keterangan tes');
-    await tester.tap(find.text('Simpan'));
+    await tester.enterText(
+      find.byKey(const Key('service_name_field')),
+      'Tes Layanan',
+    );
+    await tester.enterText(
+      find.byKey(const Key('service_description_field')),
+      'Keterangan tes',
+    );
+    expect(find.text('Tes Layanan'), findsOneWidget);
+    expect(find.text('Keterangan tes'), findsOneWidget);
+
+    tester.testTextInput.hide();
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.byKey(const Key('save_service_button')));
+    await tester.tap(find.byKey(const Key('save_service_button')));
     await tester.pumpAndSettle();
 
     expect(find.text('Tes Layanan'), findsOneWidget);

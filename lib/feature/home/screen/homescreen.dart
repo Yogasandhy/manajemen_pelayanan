@@ -116,6 +116,7 @@ class _AddServiceSheetState extends State<_AddServiceSheet> {
             ),
             const SizedBox(height: 14),
             TextField(
+              key: const Key('service_name_field'),
               controller: _nameController,
               autofocus: true,
               textInputAction: TextInputAction.next,
@@ -123,6 +124,7 @@ class _AddServiceSheetState extends State<_AddServiceSheet> {
             ),
             const SizedBox(height: 12),
             TextField(
+              key: const Key('service_description_field'),
               controller: _descriptionController,
               minLines: 2,
               maxLines: 3,
@@ -130,6 +132,7 @@ class _AddServiceSheetState extends State<_AddServiceSheet> {
             ),
             const SizedBox(height: 16),
             FilledButton.icon(
+              key: const Key('save_service_button'),
               onPressed: () => _save(l10n),
               icon: const Icon(Icons.save_outlined),
               label: Text(l10n.saveButton),

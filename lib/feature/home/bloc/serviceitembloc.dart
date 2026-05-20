@@ -49,7 +49,7 @@ class ServiceItemBloc extends Cubit<ServiceItemState> {
       description: description.trim(),
     );
 
-    emit(state.copyWith(items: [...state.items, item]));
+    emit(state.copyWith(items: [item, ...state.items]));
   }
 
   void removeServiceItem(String id) {
