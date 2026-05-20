@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manajemen_pelayanan/feature/home/bloc/serviceitembloc.dart';
 import 'package:manajemen_pelayanan/feature/home/screen/loginscreen.dart';
+import 'package:manajemen_pelayanan/l10n/app_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,10 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => ServiceItemBloc(),
       child: MaterialApp(
-        title: 'Manajemen Pelayanan',
+        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+        locale: const Locale('id'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2563EB)),
           scaffoldBackgroundColor: const Color(0xFFF6F8FB),

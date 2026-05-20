@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manajemen_pelayanan/feature/bottomnav/bottomnav.dart';
+import 'package:manajemen_pelayanan/l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -28,6 +29,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -44,14 +47,17 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color(0xFF2563EB),
                   ),
                   const SizedBox(height: 18),
-                  const Text(
-                    'Manajemen Pelayanan',
+                  Text(
+                    l10n.appTitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
+                    style: const TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Masuk untuk memantau dan mengatur layanan harian.',
+                    l10n.loginSubtitle,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey.shade700),
                   ),
@@ -59,9 +65,9 @@ class _LoginPageState extends State<LoginPage> {
                   TextField(
                     controller: _usernameController,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
-                      prefixIcon: Icon(Icons.person_outline),
+                    decoration: InputDecoration(
+                      labelText: l10n.usernameLabel,
+                      prefixIcon: const Icon(Icons.person_outline),
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -69,16 +75,16 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _passwordController,
                     obscureText: true,
                     onSubmitted: (_) => _login(),
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock_outline),
+                    decoration: InputDecoration(
+                      labelText: l10n.passwordLabel,
+                      prefixIcon: const Icon(Icons.lock_outline),
                     ),
                   ),
                   const SizedBox(height: 22),
                   FilledButton.icon(
                     onPressed: _login,
                     icon: const Icon(Icons.login),
-                    label: const Text('Masuk'),
+                    label: Text(l10n.loginButton),
                     style: FilledButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                       shape: RoundedRectangleBorder(
@@ -88,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 14),
                   Text(
-                    'Demo sederhana: username dan password bebas.',
+                    l10n.loginDemoNote,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                   ),

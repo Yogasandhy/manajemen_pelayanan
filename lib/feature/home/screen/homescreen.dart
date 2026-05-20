@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manajemen_pelayanan/core/models/service_item.dart';
 import 'package:manajemen_pelayanan/feature/home/bloc/serviceitembloc.dart';
+import 'package:manajemen_pelayanan/l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return BlocBuilder<ServiceItemBloc, ServiceItemState>(
       builder: (context, state) {
         return ListView(
@@ -18,7 +21,7 @@ class HomeScreen extends StatelessWidget {
             FilledButton.icon(
               onPressed: () => _showAddServiceSheet(context),
               icon: const Icon(Icons.add),
-              label: const Text('Tambah Layanan'),
+              label: Text(l10n.addService),
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(46),
                 shape: RoundedRectangleBorder(
@@ -28,7 +31,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Daftar Layanan',
+              l10n.serviceListTitle,
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
@@ -45,6 +48,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _showAddServiceSheet(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final nameController = TextEditingController();
     final descriptionController = TextEditingController();
 
@@ -63,23 +67,26 @@ class HomeScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Tambah Layanan',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              Text(
+                l10n.addService,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
               const SizedBox(height: 14),
               TextField(
                 controller: nameController,
                 autofocus: true,
                 textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(labelText: 'Nama layanan'),
+                decoration: InputDecoration(labelText: l10n.serviceNameLabel),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: descriptionController,
                 minLines: 2,
                 maxLines: 3,
-                decoration: const InputDecoration(labelText: 'Keterangan'),
+                decoration: InputDecoration(labelText: l10n.descriptionLabel),
               ),
               const SizedBox(height: 16),
               FilledButton.icon(
@@ -91,13 +98,13 @@ class HomeScreen extends StatelessWidget {
                   context.read<ServiceItemBloc>().addServiceItem(
                     nameController.text,
                     descriptionController.text.isEmpty
-                        ? 'Belum ada keterangan.'
+                        ? l10n.missingDescription
                         : descriptionController.text,
                   );
                   Navigator.pop(sheetContext);
                 },
                 icon: const Icon(Icons.save_outlined),
-                label: const Text('Simpan'),
+                label: Text(l10n.saveButton),
               ),
             ],
           ),
@@ -117,11 +124,13 @@ class _SummarySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Row(
       children: [
         Expanded(
           child: _SummaryCard(
-            label: 'Total',
+            label: l10n.totalLabel,
             value: state.items.length.toString(),
             color: const Color(0xFF2563EB),
           ),
@@ -129,7 +138,7 @@ class _SummarySection extends StatelessWidget {
         const SizedBox(width: 10),
         Expanded(
           child: _SummaryCard(
-            label: 'Proses',
+            label: l10n.processLabel,
             value: state.countByStatus(ServiceStatus.inProgress).toString(),
             color: const Color(0xFFF59E0B),
           ),
@@ -137,7 +146,7 @@ class _SummarySection extends StatelessWidget {
         const SizedBox(width: 10),
         Expanded(
           child: _SummaryCard(
-            label: 'Selesai',
+            label: l10n.doneLabel,
             value: state.countByStatus(ServiceStatus.completed).toString(),
             color: const Color(0xFF059669),
           ),
@@ -190,6 +199,8 @@ class _ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       child: Padding(
@@ -223,15 +234,17 @@ class _ServiceCard extends StatelessWidget {
                 Expanded(
                   child: DropdownButtonFormField<ServiceStatus>(
                     initialValue: item.status,
-                    decoration: const InputDecoration(
-                      labelText: 'Status',
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    decoration: InputDecoration(
+                      labelText: l10n.statusLabel,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                      ),
                     ),
                     items: ServiceStatus.values
                         .map(
                           (status) => DropdownMenuItem(
                             value: status,
-                            child: Text(status.label),
+                            child: Text(_statusLabel(l10n, status)),
                           ),
                         )
                         .toList(),
@@ -248,7 +261,7 @@ class _ServiceCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 IconButton.filledTonal(
-                  tooltip: 'Hapus',
+                  tooltip: l10n.deleteTooltip,
                   onPressed: () {
                     context.read<ServiceItemBloc>().removeServiceItem(item.id);
                   },
@@ -270,6 +283,7 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final color = switch (status) {
       ServiceStatus.pending => const Color(0xFF6B7280),
       ServiceStatus.inProgress => const Color(0xFFF59E0B),
@@ -284,7 +298,7 @@ class _StatusBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(99),
       ),
       child: Text(
-        status.label,
+        _statusLabel(l10n, status),
         style: TextStyle(
           color: color,
           fontSize: 12,
@@ -300,11 +314,22 @@ class _EmptyServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Card(
+    final l10n = AppLocalizations.of(context);
+
+    return Card(
       child: Padding(
-        padding: EdgeInsets.all(18),
-        child: Text('Belum ada layanan. Tambahkan layanan baru dulu.'),
+        padding: const EdgeInsets.all(18),
+        child: Text(l10n.emptyServiceMessage),
       ),
     );
   }
+}
+
+String _statusLabel(AppLocalizations l10n, ServiceStatus status) {
+  return switch (status) {
+    ServiceStatus.pending => l10n.pendingStatus,
+    ServiceStatus.inProgress => l10n.inProgressStatus,
+    ServiceStatus.completed => l10n.completedStatus,
+    ServiceStatus.cancelled => l10n.cancelledStatus,
+  };
 }

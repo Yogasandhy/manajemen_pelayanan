@@ -1,20 +1,5 @@
 enum ServiceStatus { pending, inProgress, completed, cancelled }
 
-extension ServiceStatusLabel on ServiceStatus {
-  String get label {
-    switch (this) {
-      case ServiceStatus.pending:
-        return 'Menunggu';
-      case ServiceStatus.inProgress:
-        return 'Diproses';
-      case ServiceStatus.completed:
-        return 'Selesai';
-      case ServiceStatus.cancelled:
-        return 'Batal';
-    }
-  }
-}
-
 class ServiceItem {
   final String id;
   final String name;

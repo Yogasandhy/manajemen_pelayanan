@@ -3,12 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manajemen_pelayanan/core/models/service_item.dart';
 import 'package:manajemen_pelayanan/feature/home/bloc/serviceitembloc.dart';
 import 'package:manajemen_pelayanan/feature/home/screen/loginscreen.dart';
+import 'package:manajemen_pelayanan/l10n/app_localizations.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return BlocBuilder<ServiceItemBloc, ServiceItemState>(
       builder: (context, state) {
         return ListView(
@@ -33,16 +36,16 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Admin Pelayanan',
-                            style: TextStyle(
+                          Text(
+                            l10n.adminName,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Operator layanan masyarakat',
+                            l10n.adminRole,
                             style: TextStyle(color: Colors.grey.shade700),
                           ),
                         ],
@@ -58,22 +61,22 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   _InfoTile(
                     icon: Icons.pending_actions,
-                    title: 'Layanan menunggu',
+                    title: l10n.pendingServiceCount,
                     value: state.countByStatus(ServiceStatus.pending),
                   ),
                   _InfoTile(
                     icon: Icons.sync,
-                    title: 'Sedang diproses',
+                    title: l10n.inProgressServiceCount,
                     value: state.countByStatus(ServiceStatus.inProgress),
                   ),
                   _InfoTile(
                     icon: Icons.check_circle_outline,
-                    title: 'Selesai',
+                    title: l10n.completedServiceCount,
                     value: state.countByStatus(ServiceStatus.completed),
                   ),
                   _InfoTile(
                     icon: Icons.cancel_outlined,
-                    title: 'Dibatalkan',
+                    title: l10n.cancelledServiceCount,
                     value: state.countByStatus(ServiceStatus.cancelled),
                   ),
                 ],
@@ -88,7 +91,7 @@ class ProfileScreen extends StatelessWidget {
                 );
               },
               icon: const Icon(Icons.logout),
-              label: const Text('Keluar'),
+              label: Text(l10n.logoutButton),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size.fromHeight(48),
                 shape: RoundedRectangleBorder(
