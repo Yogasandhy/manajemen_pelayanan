@@ -178,6 +178,14 @@ class _SummarySection extends StatelessWidget {
             color: const Color(0xFF059669),
           ),
         ),
+         const SizedBox(width: 10),
+        Expanded(
+          child: _SummaryCard(
+            label: l10n.cancelledStatus,
+            value: state.countByStatus(ServiceStatus.cancelled).toString(),
+            color: const Color(0xFFDC2626),
+          ),
+        ),
       ],
     );
   }
